@@ -184,3 +184,6 @@ functions/.env*
 
 # Environment
 .env.*
+
+# Mason
+.mason/
