@@ -6,6 +6,8 @@ analyzer:
     - android/**
     - ios/**
     - "**/*.g.dart"
+    - web/**
+    - macos/**
   language:
     strict-casts: true
     strict-raw-types: true
