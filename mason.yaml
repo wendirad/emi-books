@@ -1,0 +1,5 @@
+bricks:
+  flutter_template:
+    git:
+      url: "https://github.com/wendirad/emi-flutter-template"
+      path: 

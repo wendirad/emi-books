@@ -1,0 +1,18 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Profile photos live at images/profile_picture/<uid>.<ext>.
+    match /images/profile_picture/{fileName} {
+      allow read: if request.auth != null;
+
+      allow create, update: if request.auth != null
+        && fileName.matches(request.auth.uid + '\\..+')
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+
+      allow delete: if request.auth != null
+        && fileName.matches(request.auth.uid + '\\..+');
+    }
+  }
+}

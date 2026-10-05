@@ -1,0 +1,12 @@
+# Install once with `lefthook install`.
+pre-commit:
+  parallel: false
+  commands:
+    format:
+      glob: "*.dart"
+      exclude: '(\.g\.dart|/generated/)'
+      run: dart format {staged_files}
+      stage_fixed: true
+    analyze:
+      glob: "*.dart"
+      run: flutter analyze
