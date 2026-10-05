@@ -28,8 +28,6 @@ One line per item, so a single `grep` finds it.
 
 ## Tasks
 
-- [x] T001 l10n: native-speaker review of `app_am.arb`
-- [x] T002 core: test `firestore.rules` and `storage.rules` against the Firebase emulator
 - [ ] T003 app: build the Home tab
 - [ ] T004 auth: widget tests for the sign-in and sign-up screens
 - [ ] T005 settings: widget tests for the settings screen

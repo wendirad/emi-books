@@ -96,6 +96,6 @@ Use `mocktail` and `bloc_test`.
 - **Failure:** the class and its English table in `domain/failures/`, the code's text in both `.arb` files and the feature's `*_failure_message.dart`, and extended failure and message tests.
 - **Feature module:** copy `modules/profile`, expose only the public API in `<name>.dart`, register `<Name>Module` in `app/app_module.dart` and its routes in `AppRoute`, add a row to `STATUS.md`.
 - **Delete a feature or file:** remove it from its barrel, module routes and binds, `AppRoute`, other importers and tests; `flutter analyze` must report nothing.
-
+- Never add a part of chat discussion as a comment. A comment in any place is only added to describe what it is not because you are asked to fix. Any explaination regarding the change must be sent to the chat.
 ## Git
 - Follow `gitflow` architecture for git usage.
