@@ -1,6 +1,6 @@
 # App Check verifier
 
-Small service that nginx calls before forwarding a request to self-hosted
+Small service that nginx calls before forwarding a request to
 Supabase. It checks the Firebase App Check token the app sends in the
 `X-Firebase-AppCheck` header and answers `204` (valid) or `401` (missing or
 invalid). The app side is `AppCheckHttpClient` in `lib/src/core/utils/`.

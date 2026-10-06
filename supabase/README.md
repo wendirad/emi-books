@@ -57,4 +57,4 @@ Reset uses a 6 digit email code. The recovery email template (Authentication, Em
 <p>Your code is {{ .Token }}</p>
 ```
 
-The code length is set by `GOTRUE_MAILER_OTP_LENGTH` (default 6) and its lifetime by `GOTRUE_MAILER_OTP_EXP` (default 3600 seconds). SMTP must be configured on the self-hosted instance for the email to be sent.
+The code length is set by `GOTRUE_MAILER_OTP_LENGTH` (default 6) and its lifetime by `GOTRUE_MAILER_OTP_EXP` (default 3600 seconds). SMTP must be configured on the instance for the email to be sent.

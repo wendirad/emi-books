@@ -23,7 +23,7 @@ One line per item, so a single `grep` finds it.
 | F-theme | Theme: light, dark, system | done | `core/theme` |
 | F-l10n | Localization: English, Amharic | done | Amharic reviewed |
 | F-home | Home tab | placeholder | shows the word "Home" |
-| F-rules | Firestore and Storage rules | tested | `firestore.rules`, `storage.rules` |
+| F-supabase | Supabase schema, policies and storage bucket | tested | `supabase/migrations`, `supabase/tests` |
 | F-tests | Screen and repository tests | partial | `AppButton` and `AuthFooter` only |
 
 ## Tasks
@@ -33,12 +33,12 @@ One line per item, so a single `grep` finds it.
 - [ ] T005 settings: widget tests for the settings screen
 - [ ] T006 profile: widget tests for the edit-profile screen
 - [ ] T007 auth: repository tests for `AuthRepository` and `ProfileRepository` with fakes
-- [~] T008 core: migrate Firebase auth, Firestore and Storage to self-hosted Supabase (keep App Check) (epic #10)
+- [~] T008 core: migrate Firebase auth, Firestore and Storage to Supabase (keep App Check) (epic #10)
   - [x] T008.1 starter: Supabase init, env keys, client bind
   - [x] T008.2 move auth to Supabase Auth (#6)
   - [x] T008.3 move profile data to a Supabase table with RLS and migration (#4)
   - [x] T008.4 move profile photo to Supabase Storage (#5), repository code moves with T008.2
-  - [ ] T008.5 remove Firebase auth, Firestore, Storage, rules and rules_test (#9)
+  - [x] T008.5 remove Firebase auth, Firestore, Storage, rules and rules_test (#9)
   - [x] T008.6 keep App Check and send its token to Supabase (#3)
   - [x] T008.7 bucket and storage policies with tests (#5)
 - [ ] T009 auth: low priority: require email confirmation on sign up (#7)

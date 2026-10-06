@@ -3,21 +3,14 @@
 class EnvKeys {
   const EnvKeys._();
 
-  // Supabase (self-hosted). The anon key is public; never put the service
+  // Supabase. The anon key is public; never put the service
   // role key here.
   static const String supabaseUrl = 'supabaseUrl';
   static const String supabaseAnonKey = 'supabaseAnonKey';
 
-  // Firebase App Check / emulators (debug builds only)
+  // Firebase App Check debug tokens (debug builds only)
   static const String androidDebugToken = 'androidDebugToken';
   static const String appleDebugToken = 'appleDebugToken';
-  static const String useEmulators = 'useEmulators';
-  static const String emulatorDebugHost = 'emulatorDebugHost';
-  static const String authEmulatorPort = 'authEmulatorPort';
-  static const String firestoreEmulatorPort = 'firestoreEmulatorPort';
-  static const String storageEmulatorPort = 'storageEmulatorPort';
-
-  // Password reset links
 
   // Content
   static const String avatarsPublicProvider = 'avatarsPublicProvider';

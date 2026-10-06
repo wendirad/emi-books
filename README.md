@@ -22,7 +22,7 @@ samples, guidance on mobile development, and a full API reference.
 
 | Key | Purpose |
 |---|---|
-| `supabaseUrl` | Base URL of the self-hosted Supabase instance |
+| `supabaseUrl` | Base URL of the Supabase instance |
 | `supabaseAnonKey` | Public anon key of the instance, never the service role key |
 | `androidDebugToken` | Firebase App Check debug token, debug builds on Android |
 | `appleDebugToken` | Firebase App Check debug token, debug builds on iOS |
