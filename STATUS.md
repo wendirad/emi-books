@@ -33,3 +33,9 @@ One line per item, so a single `grep` finds it.
 - [ ] T005 settings: widget tests for the settings screen
 - [ ] T006 profile: widget tests for the edit-profile screen
 - [ ] T007 auth: repository tests for `AuthRepository` and `ProfileRepository` with fakes
+- [~] T008 core: migrate Firebase auth, Firestore and Storage to self-hosted Supabase (keep App Check)
+  - [x] T008.1 starter: Supabase init, env keys, client bind
+  - [ ] T008.2 move auth to Supabase Auth
+  - [ ] T008.3 move profile data to a Supabase table with RLS and migration
+  - [ ] T008.4 move profile photo to Supabase Storage
+  - [ ] T008.5 remove Firebase auth, Firestore, Storage, rules and rules_test

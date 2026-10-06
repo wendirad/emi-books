@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../core/constants/constants.dart';
 import '../core/l10n/l10n.dart';
@@ -25,6 +26,7 @@ Module appModule({
       c
         ..addInstance<ThemeService>(themeService)
         ..addInstance<LocaleService>(localeService)
+        ..addInstance<SupabaseClient>(Supabase.instance.client)
         ..addLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance)
         ..addLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance)
         ..addLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance)
