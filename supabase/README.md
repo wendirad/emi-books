@@ -43,3 +43,18 @@ insert into public.admins (email) values ('person@example.com');
 
 Objects are stored as `<uid>/profile.<ext>` and `profiles.photo_path` holds that
 path. The app reads photos through signed URLs.
+
+## Auth
+
+The app signs users in with Supabase Auth (email and password). Sign up passes the business name as user metadata (`business_name`), and the `on_auth_user_created` trigger copies it into `public.profiles`.
+
+### Password reset
+
+Reset uses a 6 digit email code. The recovery email template (Authentication, Email Templates, Reset Password) must contain `{{ .Token }}` and no longer needs the link:
+
+```html
+<h2>Reset your password</h2>
+<p>Your code is {{ .Token }}</p>
+```
+
+The code length is set by `GOTRUE_MAILER_OTP_LENGTH` (default 6) and its lifetime by `GOTRUE_MAILER_OTP_EXP` (default 3600 seconds). SMTP must be configured on the self-hosted instance for the email to be sent.
