@@ -55,9 +55,9 @@ Manage debug tokens) must reach Supabase normally.
 ## Must do on the server
 - Do not expose the Supabase gateway port, Studio or Postgres to the internet.
   nginx must be the only public way in, or this check can be skipped.
-- Image URLs loaded by `Image.network` carry no header. Either leave
-  `/storage/v1/object/public/` out of the protected locations or load images
-  through the app's HTTP client. Decided in the Storage issue.
+- Image URLs loaded by `Image.network` carry no header. Signed storage URLs
+  (`/storage/v1/object/sign/`) skip the check in `nginx/app-check.conf`
+  because the URL itself holds a time limited token. Buckets stay private.
 
 ## Tests
 `npm ci && npm test` runs the verifier against a locally generated key pair.
