@@ -129,9 +129,6 @@ app.*.symbols
 .env.test.local
 .env.production.local
 
-# emulator output
-**/emulator-data/**
-
 # Miscellaneous
 .DS_Store
 .atom/
@@ -170,9 +167,6 @@ app.*.map.json
 firebase-debug.log*
 firebase-debug.*.log*
 ui-debug.log
-firestore-debug.log
-database-debug.log
-pubsub-debug.log
 .runtimeconfig.json
 serviceAccountKey.json
 *-firebase-adminsdk-*.json

@@ -11,7 +11,7 @@ updates:
       prefix: "chore(deps)"
     groups:
       firebase:
-        patterns: ["firebase_*", "cloud_firestore"]
+        patterns: ["firebase_*"]
       dev-tools:
         dependency-type: development
 
@@ -23,12 +23,3 @@ updates:
       default-days: 3
     commit-message:
       prefix: "ci"
-
-  - package-ecosystem: npm
-    directory: /rules_test
-    schedule:
-      interval: weekly
-    cooldown:
-      default-days: 3
-    commit-message:
-      prefix: "chore(deps)"
