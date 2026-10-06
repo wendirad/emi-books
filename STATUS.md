@@ -36,7 +36,7 @@ One line per item, so a single `grep` finds it.
 - [~] T008 core: migrate Firebase auth, Firestore and Storage to self-hosted Supabase (keep App Check) (epic #10)
   - [x] T008.1 starter: Supabase init, env keys, client bind
   - [ ] T008.2 move auth to Supabase Auth (#6)
-  - [ ] T008.3 move profile data to a Supabase table with RLS and migration (#4)
+  - [x] T008.3 move profile data to a Supabase table with RLS and migration (#4)
   - [ ] T008.4 move profile photo to Supabase Storage (#5)
   - [ ] T008.5 remove Firebase auth, Firestore, Storage, rules and rules_test (#9)
   - [x] T008.6 keep App Check and send its token to Supabase (#3)
