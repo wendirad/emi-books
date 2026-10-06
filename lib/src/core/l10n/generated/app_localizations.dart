@@ -404,6 +404,12 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get fieldEmail;
 
+  /// No description provided for @fieldCode.
+  ///
+  /// In en, this message translates to:
+  /// **'6 digit code'**
+  String get fieldCode;
+
   /// No description provided for @fieldPassword.
   ///
   /// In en, this message translates to:
@@ -485,7 +491,7 @@ abstract class AppLocalizations {
   /// No description provided for @passwordResetEmailSent.
   ///
   /// In en, this message translates to:
-  /// **'Password Reset Email Sent Successfully!'**
+  /// **'Password reset code sent to your email.'**
   String get passwordResetEmailSent;
 
   /// No description provided for @passwordResetTitle.
@@ -497,7 +503,7 @@ abstract class AppLocalizations {
   /// No description provided for @passwordResetSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Reset your password with email'**
+  /// **'We will email you a 6 digit code'**
   String get passwordResetSubtitle;
 
   /// No description provided for @passwordResetRememberPrompt.
@@ -521,7 +527,7 @@ abstract class AppLocalizations {
   /// No description provided for @passwordResetSendButton.
   ///
   /// In en, this message translates to:
-  /// **'Send Password Reset Email'**
+  /// **'Send Reset Code'**
   String get passwordResetSendButton;
 
   /// No description provided for @confirmResetSuccess.
@@ -535,6 +541,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set your new password'**
   String get confirmResetSubtitle;
+
+  /// No description provided for @confirmResetCodeSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6 digit code sent to your email'**
+  String get confirmResetCodeSubtitle;
+
+  /// No description provided for @confirmResetVerifyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Code'**
+  String get confirmResetVerifyButton;
 
   /// No description provided for @confirmResetButton.
   ///
@@ -631,6 +649,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Enter a valid value.'**
   String get validationValueRequired;
+
+  /// No description provided for @validationCodeInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6 digit code.'**
+  String get validationCodeInvalid;
 
   /// No description provided for @failureUnknown.
   ///
@@ -743,19 +767,19 @@ abstract class AppLocalizations {
   /// No description provided for @failureActionCodeExpired.
   ///
   /// In en, this message translates to:
-  /// **'The action code has expired.'**
+  /// **'The code is wrong or has expired.'**
   String get failureActionCodeExpired;
 
   /// No description provided for @failureActionCodeInvalid.
   ///
   /// In en, this message translates to:
-  /// **'The action code is invalid or has already been used.'**
+  /// **'The code is invalid or has already been used.'**
   String get failureActionCodeInvalid;
 
   /// No description provided for @failureActionUserNotFound.
   ///
   /// In en, this message translates to:
-  /// **'No user corresponding to the action code was found.'**
+  /// **'No user corresponding to the code was found.'**
   String get failureActionUserNotFound;
 
   /// No description provided for @failureNewPasswordWeak.

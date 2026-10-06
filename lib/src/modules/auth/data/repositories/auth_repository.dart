@@ -1,36 +1,34 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthUser;
 
 import '../../../../core/constants/constants.dart';
-import '../../../../core/utils/utils.dart';
 import '../../domain/entities/auth_entities.dart';
 import '../../domain/failures/auth_failures.dart';
 import '../../domain/repositories/i_auth_repository.dart';
+import '../extensions/auth_exception_extensions.dart';
 import '../extensions/auth_extensions.dart';
 import '../models/auth_models.dart';
 
 class AuthRepository implements IAuthRepository {
-  final FirebaseAuth auth;
-  final FirebaseFirestore store;
-  final FirebaseStorage storage;
+  static const int _photoUrlLifetimeSeconds = 3600;
 
-  const AuthRepository({
-    required this.auth,
-    required this.store,
-    required this.storage,
-  });
+  final SupabaseClient client;
+
+  const AuthRepository({required this.client});
+
+  GoTrueClient get _auth => client.auth;
 
   @override
-  bool get isAuthenticated => auth.currentUser != null;
+  bool get isAuthenticated => _auth.currentSession != null;
 
   @override
   Future<Either<AuthSessionFailure, Stream<bool>>> get authStateChanges async {
     try {
-      return Right(auth.authStateChanges().map((User? user) => user != null));
+      return Right(
+        _auth.onAuthStateChange.map((AuthState state) => state.session != null),
+      );
     } catch (e, stackTrace) {
       debugPrintStack(stackTrace: stackTrace, label: '$e');
       return Left(AuthSessionFailure.fromCode('internal-error'));
@@ -45,28 +43,16 @@ class AuthRepository implements IAuthRepository {
     required String businessName,
   }) async {
     try {
-      final UserCredential credential = await auth
-          .createUserWithEmailAndPassword(email: email, password: password);
-
-      final User? user = credential.user;
-
-      if (user == null) {
-        throw StateError('Sign up returned no user');
-      }
-
-      try {
-        await store.collection(FirestoreCollections.user).doc(user.uid).set({
-          'businessName': businessName,
-          'lastUpdateTime': FieldValue.serverTimestamp(),
-        });
-      } catch (_) {
-        await user.delete();
-        rethrow;
-      }
+      await _auth.signUp(
+        email: email,
+        password: password,
+        data: {'business_name': businessName},
+      );
 
       return Right(unit);
-    } on FirebaseAuthException catch (e) {
-      return Left(SignUpWithEmailAndPasswordFailure.fromCode(e.code));
+    } on AuthException catch (e) {
+      debugPrint('Sign up failed: $e');
+      return Left(SignUpWithEmailAndPasswordFailure.fromCode(e.failureCode));
     } catch (_, stackTrace) {
       debugPrintStack(stackTrace: stackTrace);
       return Left(SignUpWithEmailAndPasswordFailure.fromCode('unknown-error'));
@@ -81,7 +67,7 @@ class AuthRepository implements IAuthRepository {
     required bool saveInfo,
   }) async {
     try {
-      await auth.signInWithEmailAndPassword(email: email, password: password);
+      await _auth.signInWithPassword(email: email, password: password);
 
       final prefs = await SharedPreferences.getInstance();
 
@@ -97,8 +83,8 @@ class AuthRepository implements IAuthRepository {
       await prefs.remove(PrefKeys.legacyPassword);
 
       return Right(unit);
-    } on FirebaseAuthException catch (e) {
-      return Left(SignInWithEmailAndPasswordFailure.fromCode(e.code));
+    } on AuthException catch (e) {
+      return Left(SignInWithEmailAndPasswordFailure.fromCode(e.failureCode));
     } catch (e, stackTrace) {
       debugPrint('Error SignIn: $e');
       debugPrintStack(stackTrace: stackTrace);
@@ -111,101 +97,125 @@ class AuthRepository implements IAuthRepository {
     required String email,
   }) async {
     try {
-      await auth.sendPasswordResetEmail(
-        email: email,
-        actionCodeSettings: ActionCodeSettings(
-          url: EnvLoader.instance.getString(EnvKeys.passwordResetContinueUrl),
-          androidPackageName: EnvLoader.instance.getString(EnvKeys.androidPackageName),
-          iOSBundleId: EnvLoader.instance.getString(EnvKeys.iosBundleId),
-          androidInstallApp: true,
-          handleCodeInApp: true,
-        ),
-      );
+      await _auth.resetPasswordForEmail(email);
 
       return Right(unit);
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') return Right(unit);
-      return Left(PasswordResetFailure.fromCode(e.code));
+    } on AuthException catch (e) {
+      if (e.failureCode == 'user-not-found') return Right(unit);
+      return Left(PasswordResetFailure.fromCode(e.failureCode));
     } catch (e, stackTrace) {
-      {
-        debugPrintStack(stackTrace: stackTrace);
-        return Left(PasswordResetFailure.fromCode('unknown-error'));
-      }
+      debugPrintStack(stackTrace: stackTrace, label: '$e');
+      return Left(PasswordResetFailure.fromCode('unknown-error'));
     }
   }
 
   @override
-  Future<Either<PasswordResetConfirmFailure, bool>> verifyPasswordResetCode({
+  Future<Either<PasswordResetConfirmFailure, Unit>> verifyPasswordResetCode({
+    required String email,
     required String code,
   }) async {
     try {
-      await auth.verifyPasswordResetCode(code);
-      return Right(true);
-    } on FirebaseAuthException catch (e) {
-      return Left(PasswordResetConfirmFailure.fromCode(e.code));
-    } catch (_) {
+      await _auth.verifyOTP(type: OtpType.recovery, email: email, token: code);
+      return Right(unit);
+    } on AuthException catch (e) {
+      return Left(
+        PasswordResetConfirmFailure.fromCode(
+          e.code == 'validation_failed' ? 'invalid-action-code' : e.failureCode,
+        ),
+      );
+    } catch (e, stackTrace) {
+      debugPrintStack(stackTrace: stackTrace, label: '$e');
       return Left(PasswordResetConfirmFailure.fromCode('invalid-action-code'));
     }
   }
 
   @override
   Future<Either<PasswordResetConfirmFailure, Unit>> confirmPasswordReset({
-    required String code,
     required String newPassword,
   }) async {
     try {
-      await auth.confirmPasswordReset(code: code, newPassword: newPassword);
+      await _auth.updateUser(UserAttributes(password: newPassword));
+      await _auth.signOut();
       return Right(unit);
-    } on FirebaseAuthException catch (e) {
-      return Left(PasswordResetConfirmFailure.fromCode(e.code));
-    } catch (_) {
-      return Left(PasswordResetConfirmFailure.fromCode('invalid-action-code'));
+    } on AuthException catch (e) {
+      return Left(PasswordResetConfirmFailure.fromCode(e.failureCode));
+    } catch (e, stackTrace) {
+      debugPrintStack(stackTrace: stackTrace, label: '$e');
+      return Left(PasswordResetConfirmFailure.fromCode('unknown-error'));
     }
   }
 
   @override
   Future<Either<AuthSessionFailure, AuthUser>> getSignedInUser() async {
     try {
-      final User? user = auth.currentUser;
+      final User? user = _auth.currentUser;
 
       if (user == null) {
         return Left(AuthSessionFailure.fromCode('no-current-user'));
       }
 
+      final Map<String, dynamic>? profile = await client
+          .from(SupabaseTables.profiles)
+          .select()
+          .eq('id', user.id)
+          .maybeSingle();
+
       final AuthUserModel userDomain = user.toModel(
-        photoUrl: await _resolvePhotoUrl(user.photoURL),
+        photoUrl: await _resolvePhotoUrl(profile?['photo_path'] as String?),
       );
 
-      final DocumentSnapshot<Map<String, dynamic>> userDoc = await store
-          .collection(FirestoreCollections.user)
-          .doc(user.uid)
-          .get();
+      if (profile == null) return Right(userDomain.entity());
 
-      if (!userDoc.exists) return Right(userDomain.entity());
+      final AuthUserModel profileUser = userDomain.copyWith(
+        firstName: profile['first_name'] as String?,
+        lastName: profile['last_name'] as String?,
+        lastUpdateTime: DateTime.tryParse(
+          profile['updated_at'] as String? ?? '',
+        ),
+      );
 
-      final Map<String, dynamic> userData = {
-        ...?userDoc.data(),
-        ...userDomain.toJson()..removeWhere((k, v) => v == null),
-      };
+      final String email = (user.email ?? '').toLowerCase();
+      final Map<String, dynamic>? admin = await client
+          .from(SupabaseTables.admins)
+          .select('email')
+          .eq('email', email)
+          .maybeSingle();
 
-      final DocumentSnapshot<Map<String, dynamic>> adminDoc = await store
-          .collection(FirestoreCollections.admin)
-          .doc(user.email)
-          .get();
+      if (admin != null) {
+        return Right(
+          AdminAuthUserModel(
+            uid: profileUser.uid,
+            firstName: profileUser.firstName,
+            lastName: profileUser.lastName,
+            email: profileUser.email,
+            photoUrl: profileUser.photoUrl,
+            creationTime: profileUser.creationTime,
+            lastSignInTime: profileUser.lastSignInTime,
+            lastUpdateTime: profileUser.lastUpdateTime,
+          ).entity(),
+        );
+      }
 
       return Right(
-        (adminDoc.exists
-                ? AdminAuthUserModel.fromJson
-                : BusinessUserModel.fromJson)(userData)
-            .entity(),
+        BusinessUserModel(
+          businessName: profile['business_name'] as String? ?? '',
+          uid: profileUser.uid,
+          firstName: profileUser.firstName,
+          lastName: profileUser.lastName,
+          email: profileUser.email,
+          photoUrl: profileUser.photoUrl,
+          creationTime: profileUser.creationTime,
+          lastSignInTime: profileUser.lastSignInTime,
+          lastUpdateTime: profileUser.lastUpdateTime,
+        ).entity(),
       );
-    } on FirebaseAuthException catch (e, stackTrace) {
+    } on AuthException catch (e, stackTrace) {
       debugPrintStack(stackTrace: stackTrace);
-      return Left(AuthSessionFailure.fromCode(e.code));
+      return Left(AuthSessionFailure.fromCode(e.failureCode));
     } catch (e, stackTrace) {
-      if (e is FirebaseException) await signOut();
+      if (e is PostgrestException) await signOut();
 
-      debugPrintStack(stackTrace: stackTrace);
+      debugPrintStack(stackTrace: stackTrace, label: '$e');
       return Left(AuthSessionFailure.fromCode('unknown-error'));
     }
   }
@@ -229,23 +239,25 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<Either<SignOutFailure, Unit>> signOut() async {
     try {
-      await auth.signOut();
+      await _auth.signOut();
       return Right(unit);
-    } on FirebaseAuthException catch (e) {
-      return Left(SignOutFailure.fromCode(e.code));
+    } on AuthException catch (e) {
+      return Left(SignOutFailure.fromCode(e.failureCode));
     } catch (_, stackTrace) {
       debugPrintStack(stackTrace: stackTrace);
       return Left(SignOutFailure.fromCode('internal-error'));
     }
   }
 
-  /// Turns a stored gs:// path into a download URL, or null if it cannot be
+  /// Turns a stored object path into a signed URL, or null if it cannot be
   /// resolved (no photo, or the object is gone).
-  Future<String?> _resolvePhotoUrl(String? stored) async {
-    if (stored == null || stored.isEmpty) return null;
+  Future<String?> _resolvePhotoUrl(String? path) async {
+    if (path == null || path.isEmpty) return null;
 
     try {
-      return await storage.refFromURL(stored).getDownloadURL();
+      return await client.storage
+          .from(StoragePaths.profilePicturesBucket)
+          .createSignedUrl(path, _photoUrlLifetimeSeconds);
     } catch (e) {
       debugPrint('Could not resolve profile photo: $e');
       return null;

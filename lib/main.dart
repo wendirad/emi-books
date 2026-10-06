@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'firebase_options.dart';
 import 'src/app/app_module.dart';
@@ -33,40 +31,16 @@ Future<void> setupFirebase() async {
           )
         : AppleAppAttestProvider(),
   );
+}
 
-  FirebaseFirestore.instance.settings = const Settings(
-    persistenceEnabled: false,
+Future<void> setupSupabase() async {
+  final EnvLoader env = EnvLoader.instance;
+
+  await Supabase.initialize(
+    url: env.getString(EnvKeys.supabaseUrl),
+    publishableKey: env.getString(EnvKeys.supabaseAnonKey),
+    httpClient: AppCheckHttpClient(),
   );
-
-  await FirebaseAuth.instance.setLanguageCode('en');
-
-  if (kDebugMode) {
-    await FirebaseAuth.instance.setSettings(
-      appVerificationDisabledForTesting: true,
-    );
-  }
-
-  if (kDebugMode && env.getBool(EnvKeys.useEmulators)) {
-    final String host = env.getString(EnvKeys.emulatorDebugHost);
-
-    await FirebaseAuth.instance.useAuthEmulator(
-      host,
-      env.getInt(EnvKeys.authEmulatorPort),
-    );
-
-    FirebaseFirestore.instance.useFirestoreEmulator(
-      host,
-      env.getInt(EnvKeys.firestoreEmulatorPort),
-    );
-
-    await FirebaseStorage.instance.useStorageEmulator(
-      host,
-      env.getInt(EnvKeys.storageEmulatorPort),
-    );
-
-    final String? debugToken = await FirebaseAppCheck.instance.getToken();
-    debugPrint('Debug Token: ${debugToken?.isNotEmpty}');
-  }
 }
 
 void main() async {
@@ -78,6 +52,7 @@ void main() async {
   await EnvLoader.instance.load();
 
   await setupFirebase();
+  await setupSupabase();
 
   final ThemeService themeService = ThemeService();
   await themeService.load();

@@ -1,0 +1,11 @@
+services:
+  app-check-verifier:
+    build: .
+    container_name: app-check-verifier
+    restart: unless-stopped
+    environment:
+      FIREBASE_PROJECT_NUMBER: ${FIREBASE_PROJECT_NUMBER:?set FIREBASE_PROJECT_NUMBER in .env}
+      APP_CHECK_ENFORCE: ${APP_CHECK_ENFORCE:-true}
+      PORT: 3000
+    ports:
+      - "127.0.0.1:${VERIFIER_PORT:-3100}:3000"

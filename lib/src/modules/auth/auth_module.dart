@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/constants/constants.dart';
 import 'data/repositories/auth_repository.dart';
@@ -29,11 +27,7 @@ final Module _authRoutes = createModule(
 final Module authModule = createModule(
   register: (c) {
     c.addLazySingleton<IAuthRepository>(
-      () => AuthRepository(
-        auth: inject<FirebaseAuth>(),
-        store: inject<FirebaseFirestore>(),
-        storage: inject<FirebaseStorage>(),
-      ),
+      () => AuthRepository(client: inject<SupabaseClient>()),
     );
 
     c.addLazySingleton<SignUpWithEmailAndPasswordUseCase>(
@@ -67,21 +61,17 @@ final Module authModule = createModule(
     );
 
     c.addLazySingleton<GetCurrentUserUseCase>(
-      () => GetCurrentUserUseCase(
-        authRepository: inject<IAuthRepository>(),
-      ),
+      () => GetCurrentUserUseCase(authRepository: inject<IAuthRepository>()),
     );
 
     c.addLazySingleton<GetRememberedEmailUseCase>(
-      () => GetRememberedEmailUseCase(
-        authRepository: inject<IAuthRepository>(),
-      ),
+      () =>
+          GetRememberedEmailUseCase(authRepository: inject<IAuthRepository>()),
     );
 
     c.addLazySingleton<ObserveAuthSessionUseCase>(
-      () => ObserveAuthSessionUseCase(
-        authRepository: inject<IAuthRepository>(),
-      ),
+      () =>
+          ObserveAuthSessionUseCase(authRepository: inject<IAuthRepository>()),
     );
 
     c.addLazySingleton<SignOutUseCase>(

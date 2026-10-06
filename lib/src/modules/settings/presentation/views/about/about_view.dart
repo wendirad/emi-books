@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_social_button/flutter_social_button.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/extensions/build_context_extensions.dart';
@@ -145,10 +145,10 @@ class _SocialMedia extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map<ButtonType, String> links = {
-      ButtonType.facebook: AppLinks.facebook,
-      ButtonType.twitter: AppLinks.twitter,
-      ButtonType.linkedin: AppLinks.linkedin,
+    final Map<FaIconData, String> links = {
+      FontAwesomeIcons.facebookF: AppLinks.facebook,
+      FontAwesomeIcons.xTwitter: AppLinks.twitter,
+      FontAwesomeIcons.linkedinIn: AppLinks.linkedin,
     }..removeWhere((_, url) => url.isEmpty);
 
     if (links.isEmpty) return const SizedBox.shrink();
@@ -167,14 +167,10 @@ class _SocialMedia extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (final MapEntry(key: type, value: url) in links.entries)
-              Transform.scale(
-                scale: 0.7,
-                child: FlutterSocialButton(
-                  onTap: () => launchLink(context, url),
-                  mini: true,
-                  buttonType: type,
-                ),
+            for (final MapEntry(key: icon, value: url) in links.entries)
+              IconButton(
+                onPressed: () => launchLink(context, url),
+                icon: FaIcon(icon, size: 18),
               ),
           ],
         ),

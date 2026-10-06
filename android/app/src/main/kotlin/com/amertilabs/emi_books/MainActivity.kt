@@ -1,5 +1,0 @@
-package com.amertilabs.emi_books
-
-import io.flutter.embedding.android.FlutterActivity
-
-class MainActivity : FlutterActivity()
