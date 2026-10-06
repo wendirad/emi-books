@@ -13,13 +13,10 @@ class ConfirmPasswordResetCubit
     required ConfirmPasswordResetUseCase confirmPasswordReset,
   }) : _confirmPasswordReset = confirmPasswordReset;
 
-  Future<void> submit({
-    required String code,
-    required String newPassword,
-  }) async {
+  Future<void> submit({required String newPassword}) async {
     await run(
       () => _confirmPasswordReset(
-        param: ConfirmPasswordResetParam(code: code, newPassword: newPassword),
+        param: ConfirmPasswordResetParam(newPassword: newPassword),
       ),
     );
   }

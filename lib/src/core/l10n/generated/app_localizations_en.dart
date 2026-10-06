@@ -171,6 +171,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get fieldEmail => 'Email';
 
   @override
+  String get fieldCode => '6 digit code';
+
+  @override
   String get fieldPassword => 'Password';
 
   @override
@@ -212,13 +215,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get passwordResetEmailSent =>
-      'Password Reset Email Sent Successfully!';
+      'Password reset code sent to your email.';
 
   @override
   String get passwordResetTitle => 'Forgot Your Password?';
 
   @override
-  String get passwordResetSubtitle => 'Reset your password with email';
+  String get passwordResetSubtitle => 'We will email you a 6 digit code';
 
   @override
   String get passwordResetRememberPrompt => 'Remember your password?';
@@ -231,13 +234,20 @@ class AppLocalizationsEn extends AppLocalizations {
       'Password Reset Confirmation Failed';
 
   @override
-  String get passwordResetSendButton => 'Send Password Reset Email';
+  String get passwordResetSendButton => 'Send Reset Code';
 
   @override
   String get confirmResetSuccess => 'Password Reset Successfully!';
 
   @override
   String get confirmResetSubtitle => 'Set your new password';
+
+  @override
+  String get confirmResetCodeSubtitle =>
+      'Enter the 6 digit code sent to your email';
+
+  @override
+  String get confirmResetVerifyButton => 'Verify Code';
 
   @override
   String get confirmResetButton => 'Reset Password';
@@ -290,6 +300,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get validationValueRequired => 'Enter a valid value.';
+
+  @override
+  String get validationCodeInvalid => 'Enter the 6 digit code.';
 
   @override
   String get failureUnknown => 'An unknown exception occurred.';
@@ -358,15 +371,15 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please make sure your email and password are correct.';
 
   @override
-  String get failureActionCodeExpired => 'The action code has expired.';
+  String get failureActionCodeExpired => 'The code is wrong or has expired.';
 
   @override
   String get failureActionCodeInvalid =>
-      'The action code is invalid or has already been used.';
+      'The code is invalid or has already been used.';
 
   @override
   String get failureActionUserNotFound =>
-      'No user corresponding to the action code was found.';
+      'No user corresponding to the code was found.';
 
   @override
   String get failureNewPasswordWeak => 'The new password is not strong enough.';

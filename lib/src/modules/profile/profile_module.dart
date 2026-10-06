@@ -1,7 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../core/constants/constants.dart';
 import 'data/repositories/profile_repository.dart';
@@ -15,17 +13,12 @@ import 'presentation/views/views.dart';
 final Module profileModule = createModule(
   register: (c) {
     c.addLazySingleton<IProfileRepository>(
-      () => ProfileRepository(
-        auth: inject<FirebaseAuth>(),
-        store: inject<FirebaseFirestore>(),
-        storage: inject<FirebaseStorage>(),
-      ),
+      () => ProfileRepository(client: inject<SupabaseClient>()),
     );
 
     c.addLazySingleton<UpdateProfileUseCase>(
-      () => UpdateProfileUseCase(
-        profileRepository: inject<IProfileRepository>(),
-      ),
+      () =>
+          UpdateProfileUseCase(profileRepository: inject<IProfileRepository>()),
     );
 
     c.route(AppRoute.updateProfile.base, child: (_, _) => UpdateProfileView());

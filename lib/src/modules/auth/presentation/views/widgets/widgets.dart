@@ -5,5 +5,6 @@ export 'components/header.dart';
 export 'components/top_bar.dart';
 export 'fields/app_text_field.dart';
 export 'fields/checkbox_field.dart';
+export 'fields/code_field.dart';
 export 'fields/email_field.dart';
 export 'fields/password_field.dart';

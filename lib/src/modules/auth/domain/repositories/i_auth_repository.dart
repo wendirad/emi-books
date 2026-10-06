@@ -31,12 +31,14 @@ abstract class IAuthRepository {
     required String email,
   });
 
-  Future<Either<PasswordResetConfirmFailure, bool>> verifyPasswordResetCode({
+  /// Checks the 6 digit code sent to [email]. On success the repository holds
+  /// a recovery session, which [confirmPasswordReset] uses.
+  Future<Either<PasswordResetConfirmFailure, Unit>> verifyPasswordResetCode({
+    required String email,
     required String code,
   });
 
   Future<Either<PasswordResetConfirmFailure, Unit>> confirmPasswordReset({
-    required String code,
     required String newPassword,
   });
 

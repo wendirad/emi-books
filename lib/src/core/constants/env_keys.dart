@@ -18,9 +18,6 @@ class EnvKeys {
   static const String storageEmulatorPort = 'storageEmulatorPort';
 
   // Password reset links
-  static const String passwordResetContinueUrl = 'passwordResetContinueURL';
-  static const String androidPackageName = 'androidPackageName';
-  static const String iosBundleId = 'iOSBundleId';
 
   // Content
   static const String avatarsPublicProvider = 'avatarsPublicProvider';

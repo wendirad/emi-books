@@ -6,24 +6,28 @@ import '../failures/auth_failures.dart';
 import '../repositories/i_auth_repository.dart';
 
 class VerifyPasswordResetCodeUseCase
-    implements UseCase<bool, VerifyPasswordResetCodeParam> {
+    implements UseCase<Unit, VerifyPasswordResetCodeParam> {
   final IAuthRepository authRepository;
 
   VerifyPasswordResetCodeUseCase({required this.authRepository});
 
   @override
-  Future<Either<PasswordResetConfirmFailure, bool>> call({
+  Future<Either<PasswordResetConfirmFailure, Unit>> call({
     required VerifyPasswordResetCodeParam param,
   }) {
-    return authRepository.verifyPasswordResetCode(code: param.code);
+    return authRepository.verifyPasswordResetCode(
+      email: param.email,
+      code: param.code,
+    );
   }
 }
 
 class VerifyPasswordResetCodeParam extends Equatable {
+  final String email;
   final String code;
 
-  const VerifyPasswordResetCodeParam({required this.code});
+  const VerifyPasswordResetCodeParam({required this.email, required this.code});
 
   @override
-  List<Object?> get props => [code];
+  List<Object?> get props => [email, code];
 }

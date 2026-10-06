@@ -170,6 +170,9 @@ class AppLocalizationsAm extends AppLocalizations {
   String get fieldEmail => 'ኢሜይል';
 
   @override
+  String get fieldCode => 'ባለ 6 አሃዝ ኮድ';
+
+  @override
   String get fieldPassword => 'የይለፍ ቃል';
 
   @override
@@ -209,13 +212,13 @@ class AppLocalizationsAm extends AppLocalizations {
   String get signOutConfirmMessage => 'ከመለያዎ መውጣት እንደሚፈልጉ እርግጠኛ ነዎት?';
 
   @override
-  String get passwordResetEmailSent => 'የይለፍ ቃል ማስተካከያ ኢሜይል ተልኳል!';
+  String get passwordResetEmailSent => 'የይለፍ ቃል ማስተካከያ ኮድ ወደ ኢሜይልዎ ተልኳል።';
 
   @override
   String get passwordResetTitle => 'የይለፍ ቃልዎን ረስተዋል?';
 
   @override
-  String get passwordResetSubtitle => 'የይለፍ ቃልዎን በኢሜይል ያስተካክሉ';
+  String get passwordResetSubtitle => 'ባለ 6 አሃዝ ኮድ በኢሜይል እንልክልዎታለን';
 
   @override
   String get passwordResetRememberPrompt => 'የይለፍ ቃልዎን ያስታውሳሉ?';
@@ -228,13 +231,19 @@ class AppLocalizationsAm extends AppLocalizations {
       'የይለፍ ቃል ማስተካከያ ማረጋገጫ አልተሳካም';
 
   @override
-  String get passwordResetSendButton => 'የማስተካከያ ኢሜይል ላክ';
+  String get passwordResetSendButton => 'የማስተካከያ ኮድ ላክ';
 
   @override
   String get confirmResetSuccess => 'የይለፍ ቃል በተሳካ ሁኔታ ተስተካክሏል!';
 
   @override
   String get confirmResetSubtitle => 'አዲሱን የይለፍ ቃልዎን ያስገቡ';
+
+  @override
+  String get confirmResetCodeSubtitle => 'ወደ ኢሜይልዎ የተላከውን ባለ 6 አሃዝ ኮድ ያስገቡ';
+
+  @override
+  String get confirmResetVerifyButton => 'ኮዱን አረጋግጥ';
 
   @override
   String get confirmResetButton => 'የይለፍ ቃል አስተካክል';
@@ -283,6 +292,9 @@ class AppLocalizationsAm extends AppLocalizations {
 
   @override
   String get validationValueRequired => 'ትክክለኛ እሴት ያስገቡ።';
+
+  @override
+  String get validationCodeInvalid => 'ባለ 6 አሃዝ ኮድ ያስገቡ።';
 
   @override
   String get failureUnknown => 'ያልታወቀ ችግር ተፈጥሯል።';
