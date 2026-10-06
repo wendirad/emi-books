@@ -48,24 +48,24 @@ Never edit `*.g.dart` or `lib/src/core/l10n/generated/`. Keep `pubspec.yaml` dep
 - `ProcessCubit<F>` (`submit(...)`) runs one use case on demand, `LoadCubit<T, F>` (`load()`) loads one value, and `Bloc` is for streams, several events and timers.
 - Cubits live in `presentation/cubits/<name>/<name>_cubit.dart`, blocs in `presentation/blocs/<name>/` (`<name>_bloc.dart` + `<name>_event.dart`). Name them `<Verb><Noun>Cubit` / `Bloc`.
 - Expose the state with a typedef: `typedef SignInState = ProcessState<SignInWithEmailAndPasswordFailure>;`. `ProcessState` has `idle`, `inProgress`, `success`, `failure(F)`; `LoadState` adds `data`.
-- The constructor takes use cases as named required parameters. A cubit or bloc never touches a repository or Firebase.
+- The constructor takes use cases as named required parameters. A cubit or bloc never touches a repository or Supabase.
 - Local `State` holds only pure UI state (text controllers, an obscure toggle). No events or cubit methods for it.
 - In widgets use `ReadContext(context).read<T>()` and `WatchContext(context).watch<T>()`; plain `context.read` is ambiguous with `flutter_modular`. Await `submit()` in async callbacks (`unawaited_futures` is on).
 - Provide the cubit with `BlocProvider(create: ...)` in the view; `inject<T>()` is allowed only in module binds, route builders, `create:` callbacks and guards.
 
 ## Errors and data
 
-- Repositories and use cases return `Either<Failure, T>` (`fpdart`) and never throw to the caller. Only a repository touches Firebase, `SharedPreferences` or the network (`ThemeService` and `LocaleService` are the exceptions). Never swallow an error in a `catch`: return a `Failure` or let it propagate.
+- Repositories and use cases return `Either<Failure, T>` (`fpdart`) and never throw to the caller. Only a repository touches Supabase, `SharedPreferences` or the network (`ThemeService` and `LocaleService` are the exceptions). Never swallow an error in a `catch`: return a `Failure` or let it propagate.
 - A failure has a `const` constructor and `fromCode(String?)`, resolved through its own message table, then `failureMessageFor`'s shared table in `core/failures`. `Failure.message` is English for logs and tests; never show it.
 - Validators return a `ValidationError`, not text.
 - Never persist a password. Remember-me stores the email only.
-- Changing a Firestore field or collection updates the model, `FirestoreCollections`, `firestore.rules` and the repository together. The same goes for `StoragePaths` and `storage.rules`. After editing a `.rules` file run `npm ci && npm test` in `rules_test/` (needs Node and Java 21); add a test for each rule you change.
+- Changing a database column or storage bucket updates the model, `SupabaseTables` or `StoragePaths`, a new file in `supabase/migrations/` and the repository together. After editing a migration or policy run the matching test in `supabase/tests/` (see `supabase/README.md`); add a check for each policy you change.
 
 ## Strings, keys and constants
 
 No inline keys or user-facing text.
 
-- Keys and paths live in `EnvKeys` (also the README table), `PrefKeys` (do not change a value without a migration), `FirestoreCollections`, `StoragePaths`, `Illustrations` and `AppRoute` (plus the owning module's `routes`).
+- Keys and paths live in `EnvKeys` (also the README table), `PrefKeys` (do not change a value without a migration), `SupabaseTables`, `StoragePaths`, `Illustrations` and `AppRoute` (plus the owning module's `routes`).
 - User-facing text goes in `lib/src/core/l10n/arb/app_en.arb` and `app_am.arb`, read with `context.l10n.<key>`. Failure text lives in `<feature>/presentation/extensions/*_failure_message.dart` (`failure.localized(context.l10n)`); validation text is `error.message(context.l10n)`.
 - Add a string to both `.arb` files (a `{placeholder}` and its `@key` entry go in `app_en.arb`), with a camelCase key that starts with its area (`signInTitle`, `failureNetwork`). Developer-facing text (exceptions, `debugPrint`) stays English and unlocalized.
 - `.env` is bundled into the app: configuration only, never secrets.
