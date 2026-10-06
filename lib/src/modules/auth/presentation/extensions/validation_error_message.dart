@@ -13,5 +13,6 @@ extension ValidationErrorMessage on ValidationError {
     ValidationError.confirmationRequired => l10n.validationConfirmRequired,
     ValidationError.passwordsDoNotMatch => l10n.validationPasswordsMismatch,
     ValidationError.valueRequired => l10n.validationValueRequired,
+    ValidationError.codeInvalid => l10n.validationCodeInvalid,
   };
 }

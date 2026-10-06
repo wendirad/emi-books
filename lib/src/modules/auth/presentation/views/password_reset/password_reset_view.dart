@@ -5,7 +5,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import '../../../../../core/constants/constants.dart';
 import '../../../../../core/extensions/build_context_extensions.dart';
 import '../../../../../core/presentation/widgets/widgets.dart';
-import '../../../domain/failures/auth_failures.dart';
 import '../../../domain/use_cases/use_cases.dart';
 import '../../cubits/password_reset/password_reset_cubit.dart';
 import '../../extensions/auth_failure_message.dart';
@@ -28,23 +27,14 @@ class _PasswordResetViewState extends State<PasswordResetView> {
         sendPasswordResetEmail: inject<SendPasswordResetEmailUseCase>(),
       ),
 
-      child: BlocListener<PasswordResetCubit, PasswordResetState>(
-        listenWhen: (p, c) => p != c,
-        listener: (context, state) async {
-          if (state.isSuccess) {
-            AppSnackBar.success(context, context.l10n.passwordResetEmailSent);
-            context.navigate(AppRoute.signIn.str);
-          }
-        },
-        child: AuthScaffold(
-          title: context.l10n.passwordResetTitle,
-          subtitle: context.l10n.passwordResetSubtitle,
-          form: _PasswordResetViewForm(formKey: _passwordResetViewFormKey),
-          footer: AuthFooter(
-            prompt: context.l10n.passwordResetRememberPrompt,
-            actionText: context.l10n.authSignIn,
-            onAction: () => context.pushNamed(AppRoute.signIn.str),
-          ),
+      child: AuthScaffold(
+        title: context.l10n.passwordResetTitle,
+        subtitle: context.l10n.passwordResetSubtitle,
+        form: _PasswordResetViewForm(formKey: _passwordResetViewFormKey),
+        footer: AuthFooter(
+          prompt: context.l10n.passwordResetRememberPrompt,
+          actionText: context.l10n.authSignIn,
+          onAction: () => context.pushNamed(AppRoute.signIn.str),
         ),
       ),
     );
@@ -75,52 +65,57 @@ class _PasswordResetViewFormState extends State<_PasswordResetViewForm> {
       context,
     ).watch<PasswordResetCubit>().state;
 
-    return Column(
-      spacing: 8,
-      children: [
-        if (state.failure case final failure?) ...[
-          AppAlert(
-            title: context.l10n.passwordResetFailedTitle,
-            value: failure.localized(context.l10n),
-            variant: AlertVariant.danger,
-            icon: Icons.report_gmailerrorred_outlined,
+    return BlocListener<PasswordResetCubit, PasswordResetState>(
+      listenWhen: (p, c) => p != c,
+      listener: (context, state) {
+        if (state.isSuccess) {
+          AppSnackBar.success(context, context.l10n.passwordResetEmailSent);
+          context.navigate(
+            AppRoute.confirmPasswordReset.str,
+            arguments: {
+              'mode': 'resetPassword',
+              'email': _emailController.text.trim(),
+            },
+          );
+        }
+      },
+      child: Column(
+        spacing: 8,
+        children: [
+          if (state.failure case final failure?) ...[
+            AppAlert(
+              title: context.l10n.passwordResetFailedTitle,
+              value: failure.localized(context.l10n),
+              variant: AlertVariant.danger,
+              icon: Icons.report_gmailerrorred_outlined,
+            ),
+          ],
+
+          Form(
+            key: widget.formKey,
+            child: Column(
+              spacing: 16,
+              children: [
+                EmailField(controller: _emailController),
+
+                const SizedBox(height: 16),
+
+                AppButton(
+                  onPress: () {
+                    if (widget.formKey.currentState!.validate()) {
+                      ReadContext(context).read<PasswordResetCubit>().submit(
+                        email: _emailController.text.trim(),
+                      );
+                    }
+                  },
+                  isLoading: state.isInProgress,
+                  title: context.l10n.passwordResetSendButton,
+                ),
+              ],
+            ),
           ),
         ],
-
-        if (context.routeState().arguments case final PasswordResetConfirmFailure failure
-            when state.isIdle) ...[
-          AppAlert(
-            title: context.l10n.passwordResetConfirmationFailedTitle,
-            value: failure.localized(context.l10n),
-            variant: AlertVariant.danger,
-            icon: Icons.report_gmailerrorred_outlined,
-          ),
-        ],
-
-        Form(
-          key: widget.formKey,
-          child: Column(
-            spacing: 16,
-            children: [
-              EmailField(controller: _emailController),
-
-              const SizedBox(height: 16),
-
-              AppButton(
-                onPress: () {
-                  if (widget.formKey.currentState!.validate()) {
-                    ReadContext(context).read<PasswordResetCubit>().submit(
-                      email: _emailController.text.trim(),
-                    );
-                  }
-                },
-                isLoading: state.isInProgress,
-                title: context.l10n.passwordResetSendButton,
-              ),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

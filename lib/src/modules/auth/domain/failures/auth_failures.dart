@@ -10,8 +10,10 @@ class AuthSessionFailure extends Failure {
     'token-revoked': 'The session has been revoked. Please sign in again.',
   };
 
-  factory AuthSessionFailure.fromCode(String? code) =>
-      AuthSessionFailure(code: code, message: failureMessageFor(code, _messages));
+  factory AuthSessionFailure.fromCode(String? code) => AuthSessionFailure(
+    code: code,
+    message: failureMessageFor(code, _messages),
+  );
 }
 
 class SignUpWithEmailAndPasswordFailure extends Failure {
@@ -68,10 +70,9 @@ class PasswordResetConfirmFailure extends Failure {
   const PasswordResetConfirmFailure({required super.message, super.code});
 
   static const Map<String, String> _messages = {
-    'expired-action-code': 'The action code has expired.',
-    'invalid-action-code':
-        'The action code is invalid or has already been used.',
-    'user-not-found': 'No user corresponding to the action code was found.',
+    'expired-action-code': 'The code is wrong or has expired.',
+    'invalid-action-code': 'The code is invalid or has already been used.',
+    'user-not-found': 'No user corresponding to the code was found.',
     'weak-password': 'The new password is not strong enough.',
   };
 

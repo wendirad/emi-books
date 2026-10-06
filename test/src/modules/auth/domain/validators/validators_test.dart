@@ -22,13 +22,35 @@ void main() {
     });
   });
 
+  group('CodeValidator', () {
+    final validate = CodeValidator().call;
+
+    test('accepts exactly six digits', () {
+      expect(validate('123456'), isNull);
+      expect(validate(' 123456 '), isNull);
+    });
+
+    test('rejects missing, short, long and non numeric codes', () {
+      expect(validate(null), ValidationError.codeInvalid);
+      expect(validate('12345'), ValidationError.codeInvalid);
+      expect(validate('1234567'), ValidationError.codeInvalid);
+      expect(validate('12a456'), ValidationError.codeInvalid);
+    });
+  });
+
   group('PasswordValidator', () {
     final validator = PasswordValidator();
 
     test('requires length, case, a digit and a symbol', () {
       expect(validator('Sh0rt!'), ValidationError.passwordTooShort);
-      expect(validator('alllowercase1!'), ValidationError.passwordNeedsUppercase);
-      expect(validator('ALLUPPERCASE1!'), ValidationError.passwordNeedsLowercase);
+      expect(
+        validator('alllowercase1!'),
+        ValidationError.passwordNeedsUppercase,
+      );
+      expect(
+        validator('ALLUPPERCASE1!'),
+        ValidationError.passwordNeedsLowercase,
+      );
       expect(validator('NoDigitsHere!'), ValidationError.passwordNeedsNumber);
       expect(validator('NoSymbol123'), ValidationError.passwordNeedsSpecial);
       expect(validator('Valid#Pass1'), isNull);

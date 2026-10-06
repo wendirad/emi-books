@@ -11,4 +11,5 @@ enum ValidationError {
   confirmationRequired,
   passwordsDoNotMatch,
   valueRequired,
+  codeInvalid,
 }
