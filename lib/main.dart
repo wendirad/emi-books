@@ -76,6 +76,7 @@ Future<void> setupSupabase() async {
   await Supabase.initialize(
     url: env.getString(EnvKeys.supabaseUrl),
     publishableKey: env.getString(EnvKeys.supabaseAnonKey),
+    httpClient: AppCheckHttpClient(),
   );
 }
 
