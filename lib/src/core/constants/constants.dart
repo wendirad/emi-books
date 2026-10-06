@@ -7,3 +7,4 @@ export 'firestore_collections.dart';
 export 'illustrations.dart';
 export 'pref_keys.dart';
 export 'storage_paths.dart';
+export 'supabase_tables.dart';
