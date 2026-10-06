@@ -51,6 +51,7 @@ class AuthRepository implements IAuthRepository {
 
       return Right(unit);
     } on AuthException catch (e) {
+      debugPrint('Sign up failed: $e');
       return Left(SignUpWithEmailAndPasswordFailure.fromCode(e.failureCode));
     } catch (_, stackTrace) {
       debugPrintStack(stackTrace: stackTrace);

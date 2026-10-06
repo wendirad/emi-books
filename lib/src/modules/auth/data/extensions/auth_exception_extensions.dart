@@ -15,7 +15,8 @@ extension AuthExceptionCodeExtensions on AuthException {
     'user_banned' => 'user-disabled',
     'signup_disabled' => 'operation-not-allowed',
     'session_expired' || 'session_not_found' => 'session-expired',
-    _ when this is AuthRetryableFetchException => 'network-request-failed',
+    _ when this is AuthRetryableFetchException =>
+      statusCode == null ? 'network-request-failed' : 'internal-error',
     _ when this is AuthWeakPasswordException => 'weak-password',
     _ when this is AuthSessionMissingException => 'no-current-user',
     _ => 'unknown-error',

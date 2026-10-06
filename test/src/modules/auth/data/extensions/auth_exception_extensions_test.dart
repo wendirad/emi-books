@@ -26,7 +26,14 @@ void main() {
     expect(codeOf(null), 'unknown-error');
   });
 
-  test('a failed request maps to a network failure', () {
+  test('a request that never got a response maps to a network failure', () {
     expect(AuthRetryableFetchException().failureCode, 'network-request-failed');
+  });
+
+  test('a server error response maps to an internal failure', () {
+    expect(
+      AuthRetryableFetchException(statusCode: '500').failureCode,
+      'internal-error',
+    );
   });
 }
