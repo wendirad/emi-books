@@ -99,3 +99,10 @@ Use `mocktail` and `bloc_test`.
 - Never add a part of chat discussion as a comment. A comment in any place is only added to describe what it is not because you are asked to fix. Any explaination regarding the change must be sent to the chat.
 ## Git
 - Follow `gitflow` architecture for git usage.
+
+## GitHub issues
+- Write objectively and impersonally. No "I", "you" or "we", and no instructions addressed to a person.
+- Sections in order: Summary, Background, Problems to solve, Suggestions, Acceptance criteria, Priority, Dependencies. Omit a section that has nothing to say.
+- Problems to solve states observed facts and gaps only. A fix, a tool or an approach never goes there.
+- Suggestions holds proposed solutions and options. It is optional and not binding.
+- Title is `type(scope): summary`. Add the `supabase` label for migration work and `priority: low` or `priority: high` when it applies.

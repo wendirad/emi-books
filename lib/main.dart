@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'firebase_options.dart';
 import 'src/app/app_module.dart';
@@ -69,6 +70,16 @@ Future<void> setupFirebase() async {
   }
 }
 
+Future<void> setupSupabase() async {
+  final EnvLoader env = EnvLoader.instance;
+
+  await Supabase.initialize(
+    url: env.getString(EnvKeys.supabaseUrl),
+    publishableKey: env.getString(EnvKeys.supabaseAnonKey),
+    httpClient: AppCheckHttpClient(),
+  );
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -78,6 +89,7 @@ void main() async {
   await EnvLoader.instance.load();
 
   await setupFirebase();
+  await setupSupabase();
 
   final ThemeService themeService = ThemeService();
   await themeService.load();
