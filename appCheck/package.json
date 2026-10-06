@@ -1,0 +1,17 @@
+{
+  "name": "app-check-verifier",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "server.mjs",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "jose": "^6.1.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

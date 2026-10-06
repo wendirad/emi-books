@@ -187,3 +187,7 @@ functions/.env*
 
 # Mason
 .mason/
+
+# App Check verifier
+appCheck/node_modules/
+!appCheck/.env.example
