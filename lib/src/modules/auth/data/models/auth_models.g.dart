@@ -13,15 +13,15 @@ AuthUserModel _$AuthUserModelFromJson(Map<String, dynamic> json) =>
       lastName: json['lastName'] as String?,
       email: json['email'] as String?,
       photoUrl: json['photoUrl'] as String?,
-      creationTime: AuthUserModel._fromTimestamp(
-        json['creationTime'] as Timestamp?,
-      ),
-      lastSignInTime: AuthUserModel._fromTimestamp(
-        json['lastSignInTime'] as Timestamp?,
-      ),
-      lastUpdateTime: AuthUserModel._fromTimestamp(
-        json['lastUpdateTime'] as Timestamp?,
-      ),
+      creationTime: json['creationTime'] == null
+          ? null
+          : DateTime.parse(json['creationTime'] as String),
+      lastSignInTime: json['lastSignInTime'] == null
+          ? null
+          : DateTime.parse(json['lastSignInTime'] as String),
+      lastUpdateTime: json['lastUpdateTime'] == null
+          ? null
+          : DateTime.parse(json['lastUpdateTime'] as String),
     );
 
 Map<String, dynamic> _$AuthUserModelToJson(AuthUserModel instance) =>
@@ -31,9 +31,9 @@ Map<String, dynamic> _$AuthUserModelToJson(AuthUserModel instance) =>
       'lastName': instance.lastName,
       'email': instance.email,
       'photoUrl': instance.photoUrl,
-      'creationTime': AuthUserModel._toTimestamp(instance.creationTime),
-      'lastSignInTime': AuthUserModel._toTimestamp(instance.lastSignInTime),
-      'lastUpdateTime': AuthUserModel._toTimestamp(instance.lastUpdateTime),
+      'creationTime': instance.creationTime?.toIso8601String(),
+      'lastSignInTime': instance.lastSignInTime?.toIso8601String(),
+      'lastUpdateTime': instance.lastUpdateTime?.toIso8601String(),
     };
 
 BusinessUserModel _$BusinessUserModelFromJson(Map<String, dynamic> json) =>
@@ -44,15 +44,15 @@ BusinessUserModel _$BusinessUserModelFromJson(Map<String, dynamic> json) =>
       lastName: json['lastName'] as String?,
       email: json['email'] as String?,
       photoUrl: json['photoUrl'] as String?,
-      creationTime: AuthUserModel._fromTimestamp(
-        json['creationTime'] as Timestamp?,
-      ),
-      lastSignInTime: AuthUserModel._fromTimestamp(
-        json['lastSignInTime'] as Timestamp?,
-      ),
-      lastUpdateTime: AuthUserModel._fromTimestamp(
-        json['lastUpdateTime'] as Timestamp?,
-      ),
+      creationTime: json['creationTime'] == null
+          ? null
+          : DateTime.parse(json['creationTime'] as String),
+      lastSignInTime: json['lastSignInTime'] == null
+          ? null
+          : DateTime.parse(json['lastSignInTime'] as String),
+      lastUpdateTime: json['lastUpdateTime'] == null
+          ? null
+          : DateTime.parse(json['lastUpdateTime'] as String),
     );
 
 Map<String, dynamic> _$BusinessUserModelToJson(BusinessUserModel instance) =>
@@ -62,9 +62,9 @@ Map<String, dynamic> _$BusinessUserModelToJson(BusinessUserModel instance) =>
       'lastName': instance.lastName,
       'email': instance.email,
       'photoUrl': instance.photoUrl,
-      'creationTime': AuthUserModel._toTimestamp(instance.creationTime),
-      'lastSignInTime': AuthUserModel._toTimestamp(instance.lastSignInTime),
-      'lastUpdateTime': AuthUserModel._toTimestamp(instance.lastUpdateTime),
+      'creationTime': instance.creationTime?.toIso8601String(),
+      'lastSignInTime': instance.lastSignInTime?.toIso8601String(),
+      'lastUpdateTime': instance.lastUpdateTime?.toIso8601String(),
       'businessName': instance.businessName,
     };
 
@@ -75,15 +75,15 @@ AdminAuthUserModel _$AdminAuthUserModelFromJson(Map<String, dynamic> json) =>
       lastName: json['lastName'] as String?,
       email: json['email'] as String?,
       photoUrl: json['photoUrl'] as String?,
-      creationTime: AuthUserModel._fromTimestamp(
-        json['creationTime'] as Timestamp?,
-      ),
-      lastSignInTime: AuthUserModel._fromTimestamp(
-        json['lastSignInTime'] as Timestamp?,
-      ),
-      lastUpdateTime: AuthUserModel._fromTimestamp(
-        json['lastUpdateTime'] as Timestamp?,
-      ),
+      creationTime: json['creationTime'] == null
+          ? null
+          : DateTime.parse(json['creationTime'] as String),
+      lastSignInTime: json['lastSignInTime'] == null
+          ? null
+          : DateTime.parse(json['lastSignInTime'] as String),
+      lastUpdateTime: json['lastUpdateTime'] == null
+          ? null
+          : DateTime.parse(json['lastUpdateTime'] as String),
     );
 
 Map<String, dynamic> _$AdminAuthUserModelToJson(AdminAuthUserModel instance) =>
@@ -93,7 +93,7 @@ Map<String, dynamic> _$AdminAuthUserModelToJson(AdminAuthUserModel instance) =>
       'lastName': instance.lastName,
       'email': instance.email,
       'photoUrl': instance.photoUrl,
-      'creationTime': AuthUserModel._toTimestamp(instance.creationTime),
-      'lastSignInTime': AuthUserModel._toTimestamp(instance.lastSignInTime),
-      'lastUpdateTime': AuthUserModel._toTimestamp(instance.lastUpdateTime),
+      'creationTime': instance.creationTime?.toIso8601String(),
+      'lastSignInTime': instance.lastSignInTime?.toIso8601String(),
+      'lastUpdateTime': instance.lastUpdateTime?.toIso8601String(),
     };

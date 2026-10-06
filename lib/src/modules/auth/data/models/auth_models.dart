@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -19,17 +18,14 @@ class AuthUserModel extends AuthUser with Equatable {
     this.lastUpdateTime,
   });
 
-  @JsonKey(fromJson: _fromTimestamp, toJson: _toTimestamp)
   // ignore: annotate_overrides, overridden_fields
   final DateTime? creationTime;
 
   @override
-  @JsonKey(fromJson: _fromTimestamp, toJson: _toTimestamp)
   // ignore: annotate_overrides, overridden_fields
   final DateTime? lastSignInTime;
 
   @override
-  @JsonKey(fromJson: _fromTimestamp, toJson: _toTimestamp)
   // ignore: annotate_overrides, overridden_fields
   final DateTime? lastUpdateTime;
 
@@ -66,10 +62,6 @@ class AuthUserModel extends AuthUser with Equatable {
       lastUpdateTime: lastUpdateTime ?? this.lastUpdateTime,
     );
   }
-
-  static DateTime? _fromTimestamp(Timestamp? timestamp) => timestamp?.toDate();
-  static Timestamp? _toTimestamp(DateTime? dateTime) =>
-      dateTime != null ? Timestamp.fromDate(dateTime) : null;
 
   factory AuthUserModel.fromJson(Map<String, dynamic> json) =>
       _$AuthUserModelFromJson(json);

@@ -16,21 +16,16 @@ class ConfirmPasswordResetUseCase
     required ConfirmPasswordResetParam param,
   }) async {
     return await authRepository.confirmPasswordReset(
-      code: param.code,
       newPassword: param.newPassword,
     );
   }
 }
 
 class ConfirmPasswordResetParam extends Equatable {
-  final String code;
   final String newPassword;
 
-  const ConfirmPasswordResetParam({
-    required this.code,
-    required this.newPassword,
-  });
+  const ConfirmPasswordResetParam({required this.newPassword});
 
   @override
-  List<Object?> get props => [code, newPassword];
+  List<Object?> get props => [newPassword];
 }

@@ -1,6 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -27,9 +24,6 @@ Module appModule({
         ..addInstance<ThemeService>(themeService)
         ..addInstance<LocaleService>(localeService)
         ..addInstance<SupabaseClient>(Supabase.instance.client)
-        ..addLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance)
-        ..addLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance)
-        ..addLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance)
         ..route(AppRoute.splash.str, child: (_, _) => SplashView())
         ..route(AppRoute.notFound.str, child: (_, _) => _NotFound())
         ..route(
